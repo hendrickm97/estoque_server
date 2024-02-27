@@ -10,7 +10,7 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "dev": "nodemon src/server.ts"
+    "dev": "node server.ts"
   },
   "author": "",
   "license": "ISC",
