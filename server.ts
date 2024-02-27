@@ -17,7 +17,7 @@ app.get("/", async (_req, res) => {
 
 app.post("/", async (req, res) => {
   const q =
-    "INSERT INTO produtos(nome, categoria, quantidade, valor) VALUES(?)";
+    "INSERT INTO produtos(nome, categoria, quantidade, valor) VALUES($1, $2, $3, $4) Returning*";
   const values = [
     req.body.nome,
     req.body.categoria,
