@@ -13,9 +13,13 @@ app.use(cors());
 
 app.use(express.json());
 
-app.get("/", async (_req, res) => {
-  const produtos = await pool.query("select * from produtos");
-  return res.json(produtos);
+app.get("/", async (req, res) => {
+  try {
+    const { rows } = await pool.query("select * from produtos");
+    res.json({ msg: "OK", data: rows });
+  } catch (error) {
+    res.json(error);
+  }
 });
 
 app.post("/", async (req, res) => {
