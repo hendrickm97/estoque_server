@@ -16,7 +16,7 @@ app.use(express.json());
 app.get("/", async (req, res) => {
   try {
     const { rows } = await pool.query("select * from produtos");
-    res.json({ msg: "OK", data: rows });
+    res.json({ data: rows });
   } catch (error) {
     res.json(error);
   }
