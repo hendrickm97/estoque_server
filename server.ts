@@ -23,19 +23,18 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/", async (req, res) => {
-  const q =
-    "INSERT INTO produtos(nome, categoria, quantidade, valor) VALUES($1, $2, $3, $4) Returning*";
-  const values = [
-    req.body.nome,
-    req.body.categoria,
-    req.body.quantidade,
-    req.body.valor,
-  ];
-  await pool.query(q, [values], (err) => {
-    if (err) return res.json(err);
+  try {
+    const { nome, categoria, quantidade, valor } = req.body;
 
-    return res.status(200).json("Produto cadastrado com sucesso.");
-  });
+    const q =
+      "INSERT INTO produtos(nome, categoria, quantidade, valor) VALUES($1, $2, $3, $4) RETURNING *";
+
+    const { rows } = await pool.query(q, [nome, categoria, quantidade, valor]);
+
+    res.json({ data: rows[0] });
+  } catch (error) {
+    res.json(error);
+  }
 });
 
 app.listen(port, () => console.log("Server is running on port 5000!"));
