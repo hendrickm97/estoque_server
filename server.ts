@@ -24,7 +24,7 @@ app.get("/", async (req, res) => {
 
 app.post("/", async (req, res) => {
   try {
-    const { nome, categoria, quantidade, valor_unitario } = req.body;
+    const { nome, categoria, quantidade, valorUnitario } = req.body;
 
     const q =
       "INSERT INTO produtos(nome, categoria, quantidade, valor) VALUES($1, $2, $3, $4) RETURNING *";
@@ -33,7 +33,7 @@ app.post("/", async (req, res) => {
       nome,
       categoria,
       quantidade,
-      valor_unitario,
+      valorUnitario,
     ]);
 
     res.json({ data: rows[0] });
@@ -44,9 +44,9 @@ app.post("/", async (req, res) => {
 
 app.delete("/", async (req, res) => {
   try {
-    const q = "DELETE FROM produtos where id = $1 RETURNING *";
+    const q = "DELETE FROM produtos WHERE id = $1 RETURNING *";
 
-    const { rows } = await pool.query(q, [req.params]);
+    const { rows } = await pool.query(q, [req.body.id]);
 
     if (rows[0]) {
       return res.json("Seu produto foi deletado com Sucesso!");
