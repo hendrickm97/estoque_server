@@ -22,31 +22,46 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.post("/", async (req, res) => {
+app.get("/:id", async (req, res) => {
   try {
-    const { nome, categoria, quantidade, valorUnitario } = req.body;
-
-    const q =
-      "INSERT INTO produtos(nome, categoria, quantidade, valor) VALUES($1, $2, $3, $4) RETURNING *";
-
-    const { rows } = await pool.query(q, [
-      nome,
-      categoria,
-      quantidade,
-      valorUnitario,
+    const { rows } = await pool.query("select * from produtos where id = $1", [
+      req.params.id,
     ]);
 
-    res.json({ data: rows[0] });
+    if (rows[0]) {
+      return res.json({ data: rows });
+    }
+
+    res.status(404).json({ msg: "not found" });
   } catch (error) {
     res.json(error);
   }
-});
+}),
+  app.post("/", async (req, res) => {
+    try {
+      const { nome, categoria, quantidade, valorUnitario } = req.body;
 
-app.delete("/", async (req, res) => {
+      const q =
+        "INSERT INTO produtos(nome, categoria, quantidade, valor) VALUES($1, $2, $3, $4) RETURNING *";
+
+      const { rows } = await pool.query(q, [
+        nome,
+        categoria,
+        quantidade,
+        valorUnitario,
+      ]);
+
+      res.json({ data: rows[0] });
+    } catch (error) {
+      res.json(error);
+    }
+  });
+
+app.delete("/:id", async (req, res) => {
   try {
     const q = "DELETE FROM produtos WHERE id = $1 RETURNING *";
 
-    const { rows } = await pool.query(q, [req.body.id]);
+    const { rows } = await pool.query(q, [req.params.id]);
 
     if (rows[0]) {
       return res.json("Seu produto foi deletado com Sucesso!");
