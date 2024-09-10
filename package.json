@@ -10,7 +10,7 @@
     "typescript": "^5.3.3"
   },
   "scripts": {
-    "dev": "node server.ts"
+    "dev": "npx ts-node -r dotenv/config server.ts"
   },
   "author": "",
   "license": "ISC",
