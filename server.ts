@@ -43,7 +43,7 @@ app.get("/:id", async (req, res) => {
       const { nome, categoria, quantidade, valorUnitario } = req.body;
 
       const q =
-        "INSERT INTO produtos(nome, categoria, quantidade, valor) VALUES($1, $2, $3, $4) RETURNING *";
+        'INSERT INTO produtos(nome, categoria, quantidade, "valorUnitario") VALUES($1, $2, $3, $4) RETURNING *';
 
       const { rows } = await pool.query(q, [
         nome,
@@ -54,8 +54,8 @@ app.get("/:id", async (req, res) => {
 
       res.status(201).json({ data: rows[0] });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ msg: "Erro interno do servidor" });
+      console.error("Error in POST route:", error);
+      res.status(500).json({ msg: "Erro interno do servidor", error });
     }
   });
 
